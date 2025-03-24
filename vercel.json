@@ -1,7 +1,4 @@
 {
-  "version": 2,
-  "buildCommand": "npm run build",
-  "installCommand": "npm install",
-  "framework": "vite",
-  "outputDirectory": "dist"
-} 
+    "buildCommand": "bun run build",
+    "installCommand": "bun install"
+  }
