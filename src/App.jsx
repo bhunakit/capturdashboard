@@ -3,6 +3,7 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import cameraData from './data/CameraData'
+import { AskAIButton } from './components/AskAIButton'
 
 function App() {
   const mapRef = useRef(null)
@@ -13,27 +14,20 @@ function App() {
   const [envTimeWindow, setEnvTimeWindow] = useState('am')
   const [animationState, setAnimationState] = useState(null)
   const [previousCamera, setPreviousCamera] = useState(null)
-  const [darkMode, setDarkMode] = useState(true)
   const [hourlyData, setHourlyData] = useState([])
   const [dailyData, setDailyData] = useState([])
   
-  // Theme colors based on mode
-  const theme = useMemo(() => ({
-    people: darkMode ? '#BB86FC' : '#9C27B0',
-    vehicles: darkMode ? '#03DAC6' : '#673AB7',
-    grid: darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.1)',
-    tooltip: darkMode ? 'rgba(30, 30, 30, 0.95)' : 'rgba(40, 52, 80, 0.95)',
-    accent1: darkMode ? '#BB86FC' : '#9C27B0',
-    accent2: darkMode ? '#03DAC6' : '#3F51B5',
-    danger: darkMode ? '#CF6679' : '#F44336',
-    warning: darkMode ? '#FFB74D' : '#FF9800'
-  }), [darkMode]);
-
-  // Handle theme change
-  useEffect(() => {
-    if (!mapRef.current) return;
-    mapRef.current.setStyle(darkMode ? 'mapbox://styles/mapbox/navigation-night-v1' : 'mapbox://styles/mapbox/navigation-day-v1');
-  }, [darkMode]);
+  // Fixed theme colors
+  const theme = {
+    people: '#9C27B0',
+    vehicles: '#673AB7',
+    grid: 'rgba(255,255,255,0.1)',
+    tooltip: 'rgba(40, 52, 80, 1)',
+    accent1: '#9C27B0',
+    accent2: '#3F51B5',
+    danger: '#F44336',
+    warning: '#FF9800'
+  };
 
   // Animation and data generation handler
   useEffect(() => {
@@ -76,10 +70,13 @@ function App() {
     
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: darkMode ? 'mapbox://styles/mapbox/navigation-night-v1' : 'mapbox://styles/mapbox/navigation-day-v1',
+      style: 'mapbox://styles/mapbox/standard-satellite',
       center: [100.49946, 13.75093],
       zoom: 10.89
     });
+
+    // Make map instance available globally
+    window.map = mapRef.current;
 
     // Add camera markers
     mapRef.current.on('load', () => {
@@ -99,7 +96,10 @@ function App() {
       });
     });
 
-    return () => mapRef.current.remove();
+    return () => {
+      mapRef.current.remove();
+      window.map = null;
+    };
   }, []);
 
   // Effect to update data on time frame change
@@ -165,33 +165,10 @@ function App() {
     <>
       <div id='map-container' ref={mapContainerRef}/>
       
-      {/* Dark mode toggle */}
-      <div className={`theme-toggle ${darkMode ? 'dark' : 'light'}`}>
-        <button onClick={() => setDarkMode(!darkMode)} aria-label="Toggle dark mode">
-          {darkMode ? (
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="5"></circle>
-              <line x1="12" y1="1" x2="12" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="23"></line>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-              <line x1="1" y1="12" x2="3" y2="12"></line>
-              <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-          )}
-        </button>
-      </div>
-      
       {/* Sidebar */}
       {(selectedCamera || sidebarVisible) && (
         <div 
-          className={`sidebar ${animationState || ''} ${darkMode ? 'dark' : 'light'}`}
+          className={`sidebar ${animationState || ''}`}
           style={{ display: sidebarVisible ? 'flex' : 'none' }}
         >
           <div className="dashboard-header">
@@ -490,6 +467,9 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Ask AI Button */}
+      <AskAIButton />
     </>
   )
 }

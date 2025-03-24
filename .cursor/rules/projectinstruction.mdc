@@ -1,0 +1,104 @@
+---
+description: instruction for project extension
+globs: 
+alwaysApply: false
+---
+Project Requirements
+
+Area Selection Tool:
+
+Implement a map selection tool similar to a snipping tool
+Allow users to draw polygons or rectangles to define areas of interest
+Enable saving of custom areas for future analysis
+
+
+AI Conversation Interface:
+
+Create a chat interface for users to query location-specific data
+Support natural language questions about demographics, traffic, etc.
+Present AI responses with relevant visualizations and metrics
+
+
+Business Analytics Features:
+
+Foot traffic estimation for retail potential
+Time-based analysis (e.g., noise levels at specific hours)
+Demographic insights for targeted marketing
+Competitive analysis (nearby businesses)
+
+
+
+Backend Requirements
+
+Data Layer:
+
+Time-series data store for temporal queries
+Geospatial database for location-based queries
+Mock datasets for:
+
+Hourly/daily foot traffic counts
+Vehicle types and counts
+Noise level measurements
+Demographic information (age groups, income levels)
+
+
+
+
+API Services:
+
+Geospatial query endpoint to handle area selection
+Natural language processing service for query interpretation
+Data aggregation service for generating insights
+Authentication and user preferences storage
+
+
+AI Integration:
+
+LLM-based service for understanding business queries
+Context-aware responses based on selected location
+Historical data analysis capabilities
+Recommendation engine for business decisions
+
+
+
+Frontend Requirements
+
+Map Interface Enhancements:
+
+Area selection tool with visual feedback
+Saved areas management panel
+Enhanced layers for different data visualization modes
+
+
+AI Chat Component:
+
+Slide-in chat interface with conversation history
+Support for rich responses (charts, tables, metrics)
+Query suggestions based on selected area
+Visual indicator of which area is being analyzed
+
+
+Analytics Dashboard:
+
+Time-based graphs showing trends
+Demographic breakdowns with visual representations
+Comparison tools for different areas or time periods
+Exportable reports with key insights
+
+
+UI/UX Considerations:
+
+Maintain the current dark theme with purple/teal accent colors
+Responsive design for different screen sizes
+Intuitive transitions between map and analytics views
+Clear visual hierarchy prioritizing key metrics
+
+
+
+Implementation Approach
+
+Start with the area selection tool and basic data visualization
+Implement mock data responses for common business queries
+Develop the AI chat interface with standard responses
+Enhance with more sophisticated data analysis and visualizations
+Refine the UI/UX based on user feedback
